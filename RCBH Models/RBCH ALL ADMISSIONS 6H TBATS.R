@@ -246,7 +246,7 @@ ggplot(in_out_depts) +
 
 in_out_depts_oh <- one_hot(as.data.table(in_out_depts), cols = "auto", dropCols = TRUE)
 
-write.csv(in_out_depts_oh, "hospital_in_out.csv")
+#write.csv(in_out_depts_oh, "hospital_in_out.csv")
 
 library(timetk)
 library(sweep)
@@ -264,7 +264,7 @@ total_forecast_tidy$date_value <-
   seq.POSIXt(
     from = as.POSIXct("2015-03-01 "),
     by = "6 hours",
-    length.out = 7861
+    length.out = nrow(total_forecast_tidy)
   )
 
 total_forecast_tidy %>%
