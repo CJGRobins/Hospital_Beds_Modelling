@@ -365,7 +365,7 @@ total_dch_ne_ts_arima_forecast_tidy$date_value <-
   rep(seq.Date(
     from = as.Date("2015-03-01"),
     by = "1 day",
-    length.out = 1980
+    length.out = nrow(total_dch_ne_ts_arima_forecast_tidy)/11
   ), times = 11)
 
 total_dch_ne_ts_arima_forecast_tidy$`Occupied Beds`[total_dch_ne_ts_arima_forecast_tidy$`Occupied Beds` <

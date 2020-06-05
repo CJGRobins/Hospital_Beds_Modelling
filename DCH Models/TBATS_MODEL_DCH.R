@@ -174,7 +174,7 @@ midnight_beds_dch_tbats_forecast_tidy$date_value <-
   rep(seq.Date(
     from = as.Date("2015-01-01"),
     by = "1 day",
-    length.out = 2038
+    length.out = nrow(midnight_beds_dch_tbats_forecast_tidy)/18
   ), times = 18)
 
 midnight_beds_dch_tbats_forecast_tidy$`Occupied Beds`[midnight_beds_dch_tbats_forecast_tidy$`Occupied Beds` <
