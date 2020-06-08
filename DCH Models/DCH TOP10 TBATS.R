@@ -12,7 +12,7 @@ library(data.table)
 library(lubridate)
 library(ggplot2)
 
-#admissions_daily_dch_dch <- read_excel("admissions_daily_dch_dch.xlsx")
+#admissions_daily_dch <- read_excel("admissions_daily_dch.xlsx")
 #View(admissions_daily_dch_ne)
 
 #cleaning data and adding 10 diagnoses as categories ----------------------------------------------------------
@@ -301,7 +301,7 @@ in_out_depts_dch_oh <-
           dropCols = TRUE)
 
 
-write.csv(in_out_depts_dch_oh, "dch_hospital_in_out.csv")
+#write.csv(in_out_depts_dch_oh, "dch_hospital_in_out.csv")
 
 total_dch_ne_ts_wide <- subset(in_out_depts_dch_oh, select = c(Date_value, 
                                       `Pneumonia, organism unspecified`,                          
@@ -337,7 +337,7 @@ total_dch_ne_ts_tbats_7 <- total_dch_ne_ts_tbats_list %>%
   mutate(data_train_7.ts = map(
     .x = data,
     .f = msts,
-    start = as.Date("2015-03-01"),
+    start = total_dch_ne_ts$Date_value[1],
     seasonal.periods = c(7, 365.25)
   ))
 
@@ -364,10 +364,10 @@ total_dch_ne_ts_tbats_forecast_tidy <-
 
 total_dch_ne_ts_tbats_forecast_tidy$date_value <-
   rep(seq.Date(
-    from = as.Date("2015-03-01"),
+    from = total_dch_ne_ts$Date_value[1],
     by = "1 day",
-    length.out = 1980
-  ), times = 11)
+    length.out = nrow(total_dch_ne_ts_tbats_forecast_tidy)/n_groups(total_dch_ne_ts_tbats_forecast_tidy)
+  ), times = n_groups(total_dch_ne_ts_tbats_forecast_tidy))
 
 total_dch_ne_ts_tbats_forecast_tidy$`Occupied Beds`[total_dch_ne_ts_tbats_forecast_tidy$`Occupied Beds` <
                                                         0] <-

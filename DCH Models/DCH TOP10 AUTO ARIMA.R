@@ -12,7 +12,7 @@ library(data.table)
 library(lubridate)
 library(ggplot2)
 
-#admissions_daily_dch_dch <- read_excel("admissions_daily_dch_dch.xlsx")
+admissions_daily_dch <- read_excel("admissions_daily_dch.xlsx")
 #View(admissions_daily_dch_ne)
 
 #cleaning data and adding 10 diagnoses as categories ----------------------------------------------------------
@@ -336,7 +336,7 @@ total_dch_ne_ts_arima_7 <- total_dch_ne_ts_arima_list %>%
   mutate(data_train_7.ts = map(
     .x = data,
     .f = tk_ts,
-    start = as.Date("2015-03-01"),
+    start = total_dch_ne_ts$Date_value[1],
     frequency = 7
   ))
 
@@ -363,10 +363,10 @@ total_dch_ne_ts_arima_forecast_tidy <-
 
 total_dch_ne_ts_arima_forecast_tidy$date_value <-
   rep(seq.Date(
-    from = as.Date("2015-03-01"),
+    from = total_dch_ne_ts$Date_value[1],
     by = "1 day",
-    length.out = nrow(total_dch_ne_ts_arima_forecast_tidy)/11
-  ), times = 11)
+    length.out = nrow(total_dch_ne_ts_arima_forecast_tidy)/n_groups(total_dch_ne_ts_arima_forecast_tidy)
+  ), times = n_groups(total_dch_ne_ts_arima_forecast_tidy))
 
 total_dch_ne_ts_arima_forecast_tidy$`Occupied Beds`[total_dch_ne_ts_arima_forecast_tidy$`Occupied Beds` <
                                                       0] <-
