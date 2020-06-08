@@ -194,9 +194,9 @@ in_out_depts_ne <- slice(in_out_depts_ne, 1:(n()-1))
 #CHANGE THE "TO" DATE TO THE LAST REAL OBSERVATION IN YOUR DATASET 
 #NOT THE DUMMY DATE FOR PTS IN HOSPITAL
 
-in_out_depts_ne$new_date <- seq.POSIXt(from = as.POSIXct("2015-01-01 3:00", tz="UTC"),
-                                    to = as.POSIXct("2020-05-18 21:00", tz="UTC"),
-                                    by = "6 hours")
+in_out_depts_ne$new_date <- seq.POSIXt(from = as.POSIXct(in_out_depts_ne$Date_value[1]),
+                                       length.out = nrow(in_out_depts_ne),
+                                       by = "6 hours")
 library(directlabels)
  
 #PLOT OF COVID V TOTAL EMERGENCY ADMISSIONS
@@ -250,7 +250,7 @@ total_ne_ts_2 <-subset(total_ne_ts, select = c(running_total))
 
 #simple total emergency admissions
 
-total_ne_msts <- msts(total_ne_ts, seasonal.periods = c(28, 1461))
+total_ne_msts <- msts(total_ne_ts_2, seasonal.periods = c(28, 1461))
 total_ne_fit <- tbats(total_ne_msts)
 total_ne_forecast <- forecast(total_ne_fit, h=240)
 total_ne_forecast_tidy <- sw_sweep(total_ne_forecast)
