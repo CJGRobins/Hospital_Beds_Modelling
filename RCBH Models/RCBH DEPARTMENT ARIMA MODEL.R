@@ -88,7 +88,7 @@ midnight_beds_list_ts <- midnight_beds_list %>%
   mutate(data_train.ts = map(
     .x = data,
     .f = tk_ts,
-    start = decimal_date(as.Date("2017-10-01")),
+    start = decimal_date(midnight_beds$Date_Value[1]),
     freq = 7
   ))
 

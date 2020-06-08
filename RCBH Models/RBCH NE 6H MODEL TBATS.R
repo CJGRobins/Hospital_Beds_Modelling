@@ -11,6 +11,7 @@ library(mltools)
 library(data.table)
 library(lubridate)
 library(ggplot2)
+library(sweep)
 
 #admissions_daily <- read_excel("admissions_daily.xlsx")
 #View(admissions_daily_ne)
@@ -243,8 +244,9 @@ in_out_depts_ne_oh <- one_hot(as.data.table(in_out_depts_ne), cols = "auto", dro
 
 #write.csv(in_out_depts_ne_oh, "hospital_in_out.csv")
 
-total_ne_ts <- subset(in_out_depts_ne_oh, select = c(running_total))
+total_ne_ts <- subset(in_out_depts_ne_oh, select = c(new_date, running_total))
 total_ne_ts <- slice(total_ne_ts, 240:n())
+total_ne_ts_2 <-subset(total_ne_ts, select = c(running_total))
 
 #simple total emergency admissions
 
@@ -254,7 +256,7 @@ total_ne_forecast <- forecast(total_ne_fit, h=240)
 total_ne_forecast_tidy <- sw_sweep(total_ne_forecast)
 total_ne_forecast_tidy$date_value <-
   seq.POSIXt(
-    from = as.POSIXct("2015-03-01 "),
+    from = total_ne_ts$new_date[1],
     by = "6 hours",
     length.out = nrow(total_ne_forecast_tidy)
   )

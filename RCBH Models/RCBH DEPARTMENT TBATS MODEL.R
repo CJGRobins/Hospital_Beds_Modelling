@@ -87,7 +87,7 @@ midnight_beds_tbats_7 <- midnight_beds_tbats_list %>%
   mutate(data_train_7.ts = map(
     .x = data,
     .f = msts,
-    start = as.Date("2015-01-01"),
+    start = midnight_beds$Date_Value[1],
     seasonal.periods = c(7, 365.25)
   ))
 
@@ -114,10 +114,10 @@ midnight_beds_tbats_forecast_tidy <-
 
 midnight_beds_tbats_forecast_tidy$date_value <-
   rep(seq.Date(
-    from = as.Date("2015-01-01"),
+    from = midnight_beds$Date_Value[1],
     by = "1 day",
-    length.out = nrow(midnight_beds_tbats_forecast_tidy)/18
-  ), times = 18)
+    length.out = nrow(midnight_beds_tbats_forecast_tidy)/n_groups(midnight_beds_tbats_forecast_tidy)
+  ), times = n_groups(midnight_beds_tbats_forecast_tidy))
 
 midnight_beds_tbats_forecast_tidy$`Occupied Beds`[midnight_beds_tbats_forecast_tidy$`Occupied Beds` <
                                                         0] <-
@@ -159,7 +159,11 @@ midnight_beds_tbats_forecast_tidy %>%
     x = "Date",
     y = "Beds"
   ) +
-  scale_x_date(breaks = "1 month", limits = c(as.Date("2020-01-01"), as.Date("2020-07-01"))) +
+  scale_x_date(
+    date_breaks = "3 month",
+    date_labels = "%Y-%m",
+    limit = c(as.Date("2020-01-01"), as.Date("2020-07-01"))
+  ) +
   scale_color_tq() +
   scale_fill_tq() +
   facet_wrap( ~ Discharge_Main_Specialty_Desc,

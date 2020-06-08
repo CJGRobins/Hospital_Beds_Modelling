@@ -247,18 +247,19 @@ in_out_depts_oh <- one_hot(as.data.table(in_out_depts), cols = "auto", dropCols 
 library(timetk)
 library(sweep)
 
-total_ts <- subset(in_out_depts_oh, select = c(running_total))
+total_ts <- subset(in_out_depts_oh, select = c(new_date, running_total))
 total_ts <- slice(total_ts, 240:n())
+total_ts_2 <- subset(total_ts, select = c(running_total))
 
 #simple total emergency admissions
 
-total_msts <- msts(total_ts, seasonal.periods = c(28, 1461)) #weekly and yearly frequencies of 6 hours
+total_msts <- msts(total_ts_2, seasonal.periods = c(28, 1461)) #weekly and yearly frequencies of 6 hours
 total_fit <- tbats(total_msts)
 total_forecast <- forecast(total_fit, h=240)
 total_forecast_tidy <- sw_sweep(total_forecast)
 total_forecast_tidy$date_value <-
   seq.POSIXt(
-    from = as.POSIXct("2015-03-01 "),
+    from = total_ts$new_date[1],
     by = "6 hours",
     length.out = nrow(total_forecast_tidy)
   )
