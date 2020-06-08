@@ -194,9 +194,9 @@ in_out_depts <- slice(in_out_depts, 1:(n()-1))
 #CHANGE THE "TO" DATE TO THE LAST REAL OBSERVATION IN YOUR DATASET 
 #NOT THE DUMMY DATE FOR PTS IN HOSPITAL
 
-in_out_depts$new_date <- seq.POSIXt(from = as.POSIXct("2015-01-01 3:00", tz="UTC"),
-                                    to = as.POSIXct("2020-05-18 21:00", tz="UTC"),
-                                    by = "6 hours")
+in_out_depts$new_date <- seq.POSIXt(from = as.POSIXct(in_out_depts$Date_value[1]),
+                                       length.out = nrow(in_out_depts),
+                                       by = "6 hours")
 library(directlabels)
 
 #PLOT OF COVID V TOTAL EMERGENCY ADMISSIONS
