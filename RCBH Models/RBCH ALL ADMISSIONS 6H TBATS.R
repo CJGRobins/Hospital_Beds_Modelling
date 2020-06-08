@@ -64,10 +64,6 @@ as.numeric(admissions_daily$`Discharge Quarter`)
 admissions_daily$dummy_var <- 1
 
 
-expanded <- admissions_daily[rep(row.names(admissions_daily), admissions_daily$LOS), ]
-admissions_daily_expanded <- data.frame(expanded,Date=expanded$`Admission Date`+(sequence(admissions_daily$LOS)-1))
-
-
 admissions_daily_subset <- subset(admissions_daily, select = c(`Admission Date`, `Admission Quarter`, `Discharge Date`, `Discharge Quarter`, Discharge_Main_Specialty_Desc, dummy_var))
 inflow <- admissions_daily_subset %>%
   group_by(`Admission Date`, `Admission Quarter`)

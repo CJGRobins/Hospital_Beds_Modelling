@@ -63,9 +63,6 @@ as.numeric(admissions_daily_ne$`Discharge Quarter`)
 admissions_daily_ne$dummy_var <- 1
 
 
-expanded <- admissions_daily_ne[rep(row.names(admissions_daily_ne), admissions_daily_ne$LOS), ]
-admissions_daily_ne_expanded <- data.frame(expanded,Date=expanded$`Admission Date`+(sequence(admissions_daily_ne$LOS)-1))
-
 
 admissions_daily_ne_subset <- subset(admissions_daily_ne, select = c(`Admission Date`, `Admission Quarter`, `Discharge Date`, `Discharge Quarter`, Discharge_Main_Specialty_Desc, dummy_var))
 inflow_ne <- admissions_daily_ne_subset %>%
@@ -244,7 +241,7 @@ in_out_depts_ne_oh <- one_hot(as.data.table(in_out_depts_ne), cols = "auto", dro
 
 
 
-write.csv(in_out_depts_ne_oh, "hospital_in_out.csv")
+#write.csv(in_out_depts_ne_oh, "hospital_in_out.csv")
 
 total_ne_ts <- subset(in_out_depts_ne_oh, select = c(running_total))
 total_ne_ts <- slice(total_ne_ts, 240:n())

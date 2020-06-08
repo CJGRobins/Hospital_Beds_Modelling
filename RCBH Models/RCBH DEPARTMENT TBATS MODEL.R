@@ -74,15 +74,12 @@ ggplot(data = midnight_beds,
        aes(x = `Date_Value`, y = `Occupied Beds`, fill = Discharge_Main_Specialty_Desc)) +
   geom_bar(stat = 'identity')
 
-#group fun and forecasting
-midnight_beds_dept <- midnight_beds %>%
-  group_by(Discharge_Main_Specialty_Desc)
 
-#Training for pre-covid
-#comment out the below line for everything to run faster
+# Setting data as grouped list with multiple seasonality ------------------
+
 
 midnight_beds_tbats_list <- midnight_beds %>%
-  select(-`Census Date`) %>%
+  select(-Date_Value) %>%
   group_by(Discharge_Main_Specialty_Desc) %>%
   nest()
 
