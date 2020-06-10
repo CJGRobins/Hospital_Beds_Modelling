@@ -13,29 +13,10 @@ library(lubridate)
 library(ggplot2)
 library(sweep)
 
-#admissions_daily <- read_excel("admissions_daily.xlsx")
-#View(admissions_daily_ne)
+admissions_daily <- read_excel("admissions_daily.xlsx")
 
-# use the mean LOS from previous ICD 10 codes to predict when current patients will leave, 
+
 # allowing the totalling to accurately reflect current occupancy
-# FIRST FILTER ADMISSIONS DAILY DATASET TO REMOVE THE NULL AND NA VALUES FROM LOS CACLS
-
-admissions_daily_ne_reference <- admissions_daily %>%
-  filter(diagnosis_1 != "NA",
-         LOS != "NA"
-         )
-
-mean_los_icd<- admissions_daily_ne_reference %>%
-  group_by(`ICD10 Short`) %>%
-  summarise(mean_los_icd = mean(LOS)
-  )
-
-mean_los_age_sex <- admissions_daily_ne_reference %>%
-  group_by(`Age Group`, Gender_Desc) %>%
-  summarise(mean_los = mean(LOS)
-  )
-
-
 
 ##fixing data for patients currently in hospital
 admissions_daily_ne <- admissions_daily %>%
@@ -62,7 +43,8 @@ admissions_daily_ne$`Discharge Quarter` <- ifelse(admissions_daily_ne$`Discharge
                                                       ifelse(admissions_daily_ne$`Discharge Hour`>11 & admissions_daily_ne$`Discharge Hour`<=17,3, 4)))
 as.numeric(admissions_daily_ne$`Discharge Quarter`)
 admissions_daily_ne$dummy_var <- 1
-
+admissions_daily_ne$`Admission Date` <- as.Date(admissions_daily_ne$`Admission Date`)
+admissions_daily_ne$`Discharge Date` <- as.Date(admissions_daily_ne$`Discharge Date`)
 
 
 admissions_daily_ne_subset <- subset(admissions_daily_ne, select = c(`Admission Date`, `Admission Quarter`, `Discharge Date`, `Discharge Quarter`, Discharge_Main_Specialty_Desc, dummy_var))

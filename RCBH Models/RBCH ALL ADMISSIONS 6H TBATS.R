@@ -14,25 +14,7 @@ library(ggplot2)
 
 #admissions_daily <- read_excel("admissions_daily.xlsx")
 #View(admissions_daily)
-
-# use the mean LOS from previous ICD 10 codes to predict when current patients will leave, 
 # allowing the totalling to accurately reflect current occupancy
-# FIRST FILTER ADMISSIONS DAILY DATASET TO REMOVE THE NULL AND NA VALUES FROM LOS CACLS
-
-admissions_daily_reference <- admissions_daily %>%
-  filter(diagnosis_1 != "NA",
-         LOS != "NA"
-  )
-
-mean_los_icd<- admissions_daily_reference %>%
-  group_by(`ICD10 Short`) %>%
-  summarise(mean_los_icd = mean(LOS)
-  )
-
-mean_los_age_sex <- admissions_daily_reference %>%
-  group_by(`Age Group`, Gender_Desc) %>%
-  summarise(mean_los = mean(LOS)
-  )
 
 ##fixing data for patients currently in hospital
 admissions_daily$`Discharge Hour`[is.na(admissions_daily$`Discharge Hour`)] <- 14
@@ -56,13 +38,14 @@ admissions_daily$`Admission Quarter` <- ifelse(admissions_daily$`Admission Hour`
                                                ifelse(admissions_daily$`Admission Hour`>5 & admissions_daily$`Admission Hour` <=11, 2, 
                                                       ifelse(admissions_daily$`Admission Hour`>11 & admissions_daily$`Admission Hour`<=17,3, 4)))
 #1 = 12-6am, 2 = 6-12 am, 3 = 12-6pm, 4 = 6-12midnight
-as.numeric(admissions_daily$`Admission Quarter`)
+admissions_daily$`Admission Quarter` <- as.numeric(admissions_daily$`Admission Quarter`)
 admissions_daily$`Discharge Quarter` <- ifelse(admissions_daily$`Discharge Hour`<=5, 1 ,
                                                ifelse(admissions_daily$`Discharge Hour`>5 & admissions_daily$`Discharge Hour` <=11, 2, 
                                                       ifelse(admissions_daily$`Discharge Hour`>11 & admissions_daily$`Discharge Hour`<=17,3, 4)))
-as.numeric(admissions_daily$`Discharge Quarter`)
+admissions_daily$`Discharge Quarter` <- as.numeric(admissions_daily$`Discharge Quarter`)
 admissions_daily$dummy_var <- 1
-
+admissions_daily$`Admission Date` <- as.Date(admissions_daily$`Admission Date`)
+admissions_daily$`Discharge Date` <- as.Date(admissions_daily$`Discharge Date`)
 
 admissions_daily_subset <- subset(admissions_daily, select = c(`Admission Date`, `Admission Quarter`, `Discharge Date`, `Discharge Quarter`, Discharge_Main_Specialty_Desc, dummy_var))
 inflow <- admissions_daily_subset %>%
@@ -75,7 +58,7 @@ inflow_spec <- inflow %>%
 
 inflow_wide <- spread(inflow_spec, Discharge_Main_Specialty_Desc, Count)
 inflow_wide[is.na(inflow_wide)] <- 0
-inflow_wide$total <- rowSums(inflow_wide[,3:39])
+inflow_wide$total <- rowSums(inflow_wide[,3:ncol(inflow_wide)])
 inflow_wide[is.na(inflow_wide)] <- 0
 
 
@@ -97,9 +80,9 @@ outflow_spec <- outflow %>%
 
 outflow_wide <- spread(outflow_spec, Discharge_Main_Specialty_Desc, Count)
 outflow_wide[is.na(outflow_wide)] <- 0
-outflow_wide$total <- rowSums(outflow_wide[,3:39])
+outflow_wide$total <- rowSums(outflow_wide[,3:ncol(outflow_wide)])
 outflow_wide[is.na(outflow_wide)] <- 0
-outflow_wide[,3:40] <- lapply(outflow_wide[,3:40], function(x) -1 * x)
+outflow_wide[,3:ncol(outflow_wide)] <- lapply(outflow_wide[,3:ncol(outflow_wide)], function(x) -1 * x)
 
 outflow_wide <- outflow_wide %>% dplyr::rename_all(function(x) paste0("out_", x))
 outflow_wide_merge <- outflow_wide %>% 
