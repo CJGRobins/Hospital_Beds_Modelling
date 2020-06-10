@@ -13,8 +13,12 @@ library(lubridate)
 library(ggplot2)
 library(sweep)
 
-admissions_daily <- read_excel("admissions_daily.xlsx")
+#admissions_daily <- read_excel("admissions_daily.xlsx")
 
+admissions_daily <- admissions_daily %>%
+  filter(!is.na(`Admission Date`),
+         !is.na(`Admission Hour`),
+         !is.na(Discharge_Main_Specialty_Desc))
 
 # allowing the totalling to accurately reflect current occupancy
 

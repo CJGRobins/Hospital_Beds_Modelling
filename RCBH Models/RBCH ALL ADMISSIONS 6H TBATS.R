@@ -15,6 +15,10 @@ library(ggplot2)
 #admissions_daily <- read_excel("admissions_daily.xlsx")
 #View(admissions_daily)
 # allowing the totalling to accurately reflect current occupancy
+admissions_daily <- admissions_daily %>%
+  filter(!is.na(`Admission Date`),
+         !is.na(`Admission Hour`),
+         !is.na(Discharge_Main_Specialty_Desc))
 
 ##fixing data for patients currently in hospital
 admissions_daily$`Discharge Hour`[is.na(admissions_daily$`Discharge Hour`)] <- 14
