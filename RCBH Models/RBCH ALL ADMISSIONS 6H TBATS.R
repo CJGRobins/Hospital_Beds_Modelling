@@ -20,6 +20,10 @@ admissions_daily <- admissions_daily %>%
          !is.na(`Admission Hour`),
          !is.na(Discharge_Main_Specialty_Desc))
 
+admissions_daily$diagnosis_1[is.na(admissions_daily$diagnosis_1)] <- "To Be Coded"
+admissions_daily$`ICD10 Short`[is.na(admissions_daily$`ICD10 Short`)] <- "To Be Coded"
+
+
 ##fixing data for patients currently in hospital
 admissions_daily$`Discharge Hour`[is.na(admissions_daily$`Discharge Hour`)] <- 14
 admissions_daily$`Discharge Date` <- as.Date(admissions_daily$`Discharge Date`)
