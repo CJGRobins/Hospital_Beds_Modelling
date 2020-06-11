@@ -22,6 +22,7 @@ admissions_daily <- admissions_daily %>%
 
 ##fixing data for patients currently in hospital
 admissions_daily$`Discharge Hour`[is.na(admissions_daily$`Discharge Hour`)] <- 14
+admissions_daily$`Discharge Date` <- as.Date(admissions_daily$`Discharge Date`)
 admissions_daily$`Discharge Date`[is.na(admissions_daily$`Discharge Date`)] <- as.Date("2050-01-01")
 
 #admissions_daily <- admissions_daily %>%

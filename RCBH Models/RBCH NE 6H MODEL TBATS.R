@@ -13,7 +13,7 @@ library(lubridate)
 library(ggplot2)
 library(sweep)
 
-#admissions_daily <- read_excel("admissions_daily.xlsx")
+admissions_daily <- read_excel("admissions_daily.xlsx")
 
 admissions_daily <- admissions_daily %>%
   filter(!is.na(`Admission Date`),
@@ -26,6 +26,7 @@ admissions_daily <- admissions_daily %>%
 admissions_daily_ne <- admissions_daily %>%
   filter(`Admission Type` == "NE")
 admissions_daily_ne$`Discharge Hour`[is.na(admissions_daily_ne$`Discharge Hour`)] <- 14
+admissions_daily_ne$`Discharge Date` <- as.Date(admissions_daily_ne$`Discharge Date`)
 admissions_daily_ne$`Discharge Date`[is.na(admissions_daily_ne$`Discharge Date`)] <- as.Date("2050-01-01")
 
 
