@@ -13,13 +13,17 @@ library(lubridate)
 library(ggplot2)
 library(sweep)
 
-admissions_daily <- read_excel("admissions_daily.xlsx")
+#admissions_daily <- read_excel("admissions_daily.xlsx")
 
 admissions_daily <- admissions_daily %>%
   filter(!is.na(`Admission Date`),
          !is.na(`Admission Hour`),
          !is.na(Discharge_Main_Specialty_Desc))
 
+
+admissions_daily$diagnosis_1 <- as.character(admissions_daily$diagnosis_1)
+admissions_daily$`ICD10 Short` <- as.character(admissions_daily$`ICD10 Short`)
+admissions_daily$Discharge_Main_Specialty_Desc <- as.character(admissions_daily$Discharge_Main_Specialty_Desc)
 admissions_daily$diagnosis_1[is.na(admissions_daily$diagnosis_1)] <- "To Be Coded"
 admissions_daily$`ICD10 Short`[is.na(admissions_daily$`ICD10 Short`)] <- "To Be Coded"
 

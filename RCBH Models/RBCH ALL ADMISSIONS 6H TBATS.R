@@ -20,6 +20,10 @@ admissions_daily <- admissions_daily %>%
          !is.na(`Admission Hour`),
          !is.na(Discharge_Main_Specialty_Desc))
 
+admissions_daily$diagnosis_1 <- as.character(admissions_daily$diagnosis_1)
+admissions_daily$`ICD10 Short` <- as.character(admissions_daily$`ICD10 Short`)
+admissions_daily$Discharge_Main_Specialty_Desc <- as.character(admissions_daily$Discharge_Main_Specialty_Desc)
+
 admissions_daily$diagnosis_1[is.na(admissions_daily$diagnosis_1)] <- "To Be Coded"
 admissions_daily$`ICD10 Short`[is.na(admissions_daily$`ICD10 Short`)] <- "To Be Coded"
 
