@@ -12,9 +12,14 @@ library(data.table)
 library(lubridate)
 library(ggplot2)
 library(sweep)
-
-#admissions_daily <- read_excel("admissions_daily.xlsx")
-
+library(readr)
+admissions_daily <- read_csv(
+  "admissions_daily.csv",
+  col_types = cols(
+    `Admission Date` = col_date(format = "%d/%m/%Y"),
+    `Discharge Date` = col_date(format = "%d/%m/%Y")
+  )
+)
 admissions_daily <- admissions_daily %>%
   filter(!is.na(`Admission Date`),
          !is.na(`Admission Hour`),
