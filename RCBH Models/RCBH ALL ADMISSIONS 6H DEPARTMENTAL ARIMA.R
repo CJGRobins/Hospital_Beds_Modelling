@@ -387,7 +387,7 @@ total_ts_dept_auto.arima_forecast_tidy$date_value <-
   ), times = n_groups(total_ts_dept_auto.arima_forecast_tidy))
 
 total_ts_dept_auto.arima_forecast_tidy_export <- total_ts_dept_auto.arima_forecast_tidy %>%
-  select(Specialty, key, `Occupied Beds`, lo.80, lo.95, hi.80, hi.95)
+  select(date_value, Specialty, key, `Occupied Beds`, lo.80, lo.95, hi.80, hi.95)
 
 write.csv(total_ts_dept_auto.arima_forecast_tidy_export, "all_6h_arima.csv")
 
